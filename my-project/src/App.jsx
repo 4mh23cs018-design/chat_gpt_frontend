@@ -1,23 +1,23 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, Links } from 'react-router-dom'
 import './App.css'
 import Home from './pages/home'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Header from './Components/Header'
+import Footer from './Components/Footer'
 
 function App() {
-  return (
+  return (  
     <Router>
-      <nav style={{ padding: '1rem', backgroundColor: '#333', marginBottom: '1rem' }}>
-        <Link to="/" style={{ color: 'white', marginRight: '1rem' }}>Home</Link>
-        <Link to="/about" style={{ color: 'white', marginRight: '1rem' }}>About</Link>
-        <Link to="/contact" style={{ color: 'white' }}>Contact</Link>
-      </nav>
+      <Header />
+      
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Footer />
     </Router>
   )
 }
