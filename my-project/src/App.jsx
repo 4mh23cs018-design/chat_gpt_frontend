@@ -9,6 +9,8 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import Logout from './pages/Logout'
+import AskAI from './pages/AskAI'
+
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/ask-ai" element={<AskAI />} />
+
       </Routes>
       <Footer />
     </Router>
