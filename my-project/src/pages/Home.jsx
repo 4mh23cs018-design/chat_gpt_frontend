@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const [query, setQuery] = useState("");
+    const navigate = useNavigate();
+
+    const handleSearch = (e) => {
+        if (e.key === "Enter" && query.trim() !== "") {
+            navigate(`/chat?q=${encodeURIComponent(query)}`);
+        }
+    };
+
+    const handleQuickAction = (action) => {
+        navigate(`/chat?q=${encodeURIComponent(action)}`);
+    };
+
     return (
         <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4">
             {/* Main content */}
@@ -15,6 +29,9 @@ const Home = () => {
                         type="text"
                         placeholder="Ask anything"
                         className="flex-1 outline-none text-gray-700 placeholder-gray-400"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={handleSearch}
                     />
                 </div>
 
@@ -23,6 +40,7 @@ const Home = () => {
                     {["Attach", "Search", "Study", "Create image"].map((item) => (
                         <button
                             key={item}
+                            onClick={() => handleQuickAction(item)}
                             className="px-4 py-1.5 text-sm border border-gray-300 rounded-full text-gray-700 hover:bg-gray-100 transition"
                         >
                             {item}

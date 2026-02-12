@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 const Chat = () => {
-  const [message, setMessage] = useState("");
-  const [response, setResponse] = useState("");
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleAskAI = async (e) => {
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const sendMessage = async (e) => {
     e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage = { sender: "user", text: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     setLoading(true);
-    setError("");
-    setResponse("");
 
     try {
       const res = await fetch("http://127.0.0.1:8000/ask", {
@@ -19,20 +27,24 @@ const Chat = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: message,
+          message: input,
           system_prompt: "You are a helpful assistant.",
         }),
       });
 
       const data = await res.json();
 
-      if (res.ok) {
-        setResponse(data.response);
-      } else {
-        setError("Something went wrong!");
-      }
-    } catch (err) {
-      setError("Server not reachable. Make sure FastAPI is running.");
+      const aiMessage = {
+        sender: "ai",
+        text: data.response,
+      };
+
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { sender: "ai", text: "⚠️ Server error. Try again." },
+      ]);
     }
 
     setLoading(false);
@@ -40,31 +52,38 @@ const Chat = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>🤖 Ask AI</h2>
+      <div style={styles.chatBox}>
+        <div style={styles.messages}>
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              style={
+                msg.sender === "user"
+                  ? styles.userMessage
+                  : styles.aiMessage
+              }
+            >
+              {msg.text}
+            </div>
+          ))}
 
-        <form onSubmit={handleAskAI}>
-          <textarea
-            placeholder="Type your question here..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            style={styles.textarea}
+          {loading && <div style={styles.aiMessage}>Thinking...</div>}
+
+          <div ref={bottomRef} />
+        </div>
+
+        <form onSubmit={sendMessage} style={styles.inputArea}>
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            style={styles.input}
           />
-
           <button type="submit" style={styles.button}>
-            {loading ? "Thinking..." : "Ask AI"}
+            Send
           </button>
         </form>
-
-        {response && (
-          <div style={styles.responseBox}>
-            <h4>AI Response:</h4>
-            <p>{response}</p>
-          </div>
-        )}
-
-        {error && <p style={styles.error}>{error}</p>}
       </div>
     </div>
   );
@@ -76,47 +95,55 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background: "linear-gradient(135deg, #667eea, #764ba2)",
+    background: "#f4f6f9",
   },
-  card: {
+  chatBox: {
     width: "500px",
-    padding: "30px",
-    borderRadius: "12px",
+    height: "80vh",
     background: "#fff",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+    borderRadius: "12px",
+    display: "flex",
+    flexDirection: "column",
+    boxShadow: "0 5px 20px rgba(0,0,0,0.1)",
   },
-  title: {
-    textAlign: "center",
-    marginBottom: "20px",
+  messages: {
+    flex: 1,
+    padding: "15px",
+    overflowY: "auto",
   },
-  textarea: {
-    width: "100%",
-    height: "100px",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    marginBottom: "15px",
-    fontSize: "14px",
+  userMessage: {
+    alignSelf: "flex-end",
+    background: "#4f46e5",
+    color: "#fff",
+    padding: "10px 15px",
+    borderRadius: "20px",
+    marginBottom: "10px",
+    maxWidth: "70%",
+  },
+  aiMessage: {
+    alignSelf: "flex-start",
+    background: "#e5e7eb",
+    padding: "10px 15px",
+    borderRadius: "20px",
+    marginBottom: "10px",
+    maxWidth: "70%",
+  },
+  inputArea: {
+    display: "flex",
+    borderTop: "1px solid #ddd",
+  },
+  input: {
+    flex: 1,
+    padding: "12px",
+    border: "none",
+    outline: "none",
   },
   button: {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "none",
-    background: "#667eea",
+    padding: "12px 20px",
+    background: "#4f46e5",
     color: "#fff",
-    fontSize: "16px",
+    border: "none",
     cursor: "pointer",
-  },
-  responseBox: {
-    marginTop: "20px",
-    padding: "15px",
-    background: "#f4f6ff",
-    borderRadius: "8px",
-  },
-  error: {
-    color: "red",
-    marginTop: "10px",
   },
 };
 
