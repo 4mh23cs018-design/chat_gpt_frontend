@@ -1,115 +1,92 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState({ name: 'User', email: '' });
 
     useEffect(() => {
-        // Simple authentication check
         const token = localStorage.getItem('access_token');
         if (!token) {
             navigate('/login');
         }
-        // In a real app, you'd fetch user data here
     }, [navigate]);
 
     const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        navigate('/login');
+        navigate('/logout');
     };
 
-    const stats = [
-        { label: 'Total Projects', value: '12', icon: '📁', color: 'bg-blue-500' },
-        { label: 'Active Tasks', value: '5', icon: '⚡', color: 'bg-green-500' },
-        { label: 'Messages', value: '3', icon: '✉️', color: 'bg-purple-500' },
-        { label: 'Credits', value: '450', icon: '💎', color: 'bg-yellow-500' },
-    ];
-
-    const activities = [
-        { id: 1, text: 'Logged in from a new device', time: '2 mins ago' },
-        { id: 2, text: 'Completed "Project Alpha" milestones', time: '1 hour ago' },
-        { id: 3, text: 'Password changed successfully', time: 'Yesterday' },
-    ];
-
     return (
-        <div className="min-h-screen bg-gray-50 flex">
-            {/* Sidebar */}
-            <aside className="w-64 bg-indigo-900 text-white flex flex-col">
-                <div className="p-6 text-2xl font-bold border-b border-indigo-800 flex items-center gap-2">
-                    <span className="text-3xl">🚀</span> DashVite
-                </div>
-                <nav className="flex-grow p-4 space-y-2">
-                    <a href="#" className="block p-3 rounded bg-indigo-800 text-white font-medium">Dashboard</a>
-                    <a href="#" className="block p-3 rounded hover:bg-indigo-800 transition">Analytics</a>
-                    <a href="#" className="block p-3 rounded hover:bg-indigo-800 transition">Settings</a>
-                </nav>
-                <div className="p-6 border-t border-indigo-800">
-                    <button
-                        onClick={handleLogout}
-                        className="w-full bg-red-600 hover:bg-red-700 p-2 rounded font-semibold transition flex items-center justify-center gap-2"
-                    >
-                        <span>🚪</span> Logout
-                    </button>
-
-                </div>
-            </aside>
-
+        <div className="min-h-screen bg-gray-50 flex flex-col pt-16">
             {/* Main Content */}
-            <main className="flex-grow p-8">
-                <header className="flex justify-between items-center mb-10">
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-800">Welcome Back, {user.name}!</h1>
-                        <p className="text-gray-500 mt-1">Here is what is happening with your account today.</p>
-                    </div>
-                </header>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    {stats.map((stat, idx) => (
-                        <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition">
-                            <div className={`${stat.color} w-12 h-12 rounded-lg flex items-center justify-center text-2xl`}>
-                                {stat.icon}
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">{stat.label}</p>
-                                <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                            </div>
+            <main className="flex-1 p-6">
+                <div className="max-w-7xl mx-auto">
+                    {/* Header */}
+                    <div className="md:flex md:items-center md:justify-between mb-8">
+                        <div className="flex-1 min-w-0">
+                            <h2 className="text-3xl font-bold leading-7 text-gray-900 sm:text-4xl sm:truncate">
+                                Welcome back, User!
+                            </h2>
+                            <p className="mt-1 text-sm text-gray-500">
+                                Here's what's happening with your projects today.
+                            </p>
                         </div>
-                    ))}
-                </div>
+                        <div className="mt-4 flex md:mt-0 md:ml-4">
+                            <button
+                                onClick={handleLogout}
+                                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
+                            >
+                                <svg className="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                Logout
+                            </button>
+                        </div>
+                    </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Recent Activity */}
-                    <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h3 className="text-xl font-bold text-gray-800 mb-6">Recent Activity</h3>
-                        <div className="space-y-6">
-                            {activities.map(activity => (
-                                <div key={activity.id} className="flex gap-4 items-start pb-6 border-b border-gray-50 last:border-0 last:pb-0">
-                                    <div className="w-2 h-2 rounded-full bg-indigo-500 mt-2"></div>
-                                    <div className="flex-grow">
-                                        <p className="text-gray-800 font-medium">{activity.text}</p>
-                                        <p className="text-sm text-gray-400 mt-1">{activity.time}</p>
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                        {[
+                            { label: 'Total Projects', value: '12', icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2z', color: 'text-blue-600', bg: 'bg-blue-100' },
+                            { label: 'Active Tasks', value: '24', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', color: 'text-green-600', bg: 'bg-green-100' },
+                            { label: 'Completed', value: '156', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-purple-600', bg: 'bg-purple-100' },
+                            { label: 'System Health', value: '98%', icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'text-yellow-600', bg: 'bg-yellow-100' },
+                        ].map((stat, idx) => (
+                            <div key={idx} className="bg-white overflow-hidden shadow rounded-2xl border border-gray-100 p-6 hover:shadow-md transition">
+                                <div className="flex items-center">
+                                    <div className={`flex-shrink-0 rounded-xl p-3 ${stat.bg} ${stat.color}`}>
+                                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={stat.icon} />
+                                        </svg>
+                                    </div>
+                                    <div className="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt className="text-sm font-medium text-gray-500 truncate">{stat.label}</dt>
+                                            <dd className="text-2xl font-bold text-gray-900">{stat.value}</dd>
+                                        </dl>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
 
-                    {/* Quick Tools */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                        <h3 className="text-xl font-bold text-gray-800 mb-6">Quick Tools</h3>
-                        <div className="space-y-4">
-                            <button className="w-full text-left p-4 rounded-lg border border-indigo-50 hover:bg-indigo-50 transition font-medium text-indigo-700">
-                                📊 Generate Report
-                            </button>
-                            <button className="w-full text-left p-4 rounded-lg border border-indigo-50 hover:bg-indigo-50 transition font-medium text-indigo-700">
-                                🛠️ Account Audit
-                            </button>
-                            <button className="w-full text-left p-4 rounded-lg border border-indigo-50 hover:bg-indigo-50 transition font-medium text-indigo-700">
-                                🔑 security Check
-                            </button>
+                    {/* Chart/Activity Preview */}
+                    <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <div className="bg-white shadow rounded-2xl border border-gray-100 p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                            <div className="space-y-4">
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className="flex items-center space-x-4">
+                                        <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse"></div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                                            <div className="h-3 bg-gray-100 rounded w-1/2 animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="bg-white shadow rounded-2xl border border-gray-100 p-6 flex items-center justify-center">
+                            <p className="text-gray-400 italic">Data visualization coming soon...</p>
                         </div>
                     </div>
                 </div>
