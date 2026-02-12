@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AskAI = () => {
+const Chat = () => {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
@@ -120,4 +120,4 @@ const styles = {
   },
 };
 
-export default AskAI;
+export default Chat;

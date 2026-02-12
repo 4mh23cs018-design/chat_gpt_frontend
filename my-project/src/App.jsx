@@ -8,26 +8,25 @@ import Footer from './components/Footer'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
-import Logout from './pages/Logout'
-import AskAI from './pages/AskAI'
+import Chat from './pages/Chat'
 
 function App() {
-  return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/ask-ai" element={<AskAI />} />
-      </Routes>
-      <Footer />
-    </Router>
-  )
+    return (
+        <Router>
+            <Header />
+            <Routes>
+
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/chat" element={<Chat />} />
+            </Routes>
+            <Footer />
+        </Router>
+    )
 }
 
 export default App
