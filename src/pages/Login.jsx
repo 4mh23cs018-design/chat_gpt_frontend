@@ -15,7 +15,7 @@ const Login = () => {
         setMessage('Logging in...');
 
         try {
-            const response = await fetch('http://127.0.0.1:8000/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_KEY}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,6 +28,7 @@ const Login = () => {
             if (response.ok) {
                 setMessage('Login successful!');
                 localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('user_id', data.user_id);
                 setTimeout(() => navigate('/dashboard'), 2000);
             } else {
                 setMessage(`Error: ${data.detail || 'Invalid credentials'}`);
