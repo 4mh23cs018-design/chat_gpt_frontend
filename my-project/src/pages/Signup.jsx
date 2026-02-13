@@ -36,7 +36,7 @@ const Signup = () => {
         setMessage('');
 
         try {
-            const response = await fetch('/api/signup', {
+            const response = await fetch(`${import.meta.env.VITE_API_KEY}/api/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

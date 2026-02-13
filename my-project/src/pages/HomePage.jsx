@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const Home = () => {
+const HomePage = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
@@ -112,4 +112,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
